@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect,url_for,jsonify
+from flask import Flask, render_template, request,redirect,url_for
 from bson import ObjectId
 from pymongo import MongoClient
 from datetime import datetime
