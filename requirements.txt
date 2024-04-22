@@ -1,0 +1,9 @@
+dnspython
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+pymongo
+python-dotenv
+Werkzeug
+
