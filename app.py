@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request,redirect,url_for,jsonify
 from bson import ObjectId
 from pymongo import MongoClient
+from datetime import datetime
 
 import os
 from os.path import join, dirname
@@ -35,12 +36,17 @@ def addfruit():
         nama= request.form['nama']
         harga=request.form['harga']
         deskripsi= request.form['deskripsi']
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
         gambar= request.files['gambar']
+        
 
         if gambar:
+         
             gambar_asli=gambar.filename
-            file_gambar=gambar_asli.split('/')[-1]
-            file_path=f"static/assets/ImagePath/{file_gambar}"
+            extensi=gambar_asli.split('.')[-1]
+            file_asli=f"img-{mytime}.{extensi}"
+            file_path=f'static/assets/ImagePath/img-{mytime}.{extensi}'
             gambar.save(file_path)
         else:
             gambar=None
@@ -48,7 +54,7 @@ def addfruit():
         doc = {
             'nama':nama,
             'harga':harga,
-            'gambar':file_gambar,
+            'gambar':file_asli,
             'deskripsi':deskripsi
         }
         db.fruit.insert_one(doc)
@@ -62,6 +68,8 @@ def editfruit(_id):
         nama = request.form['nama']
         harga = request.form['harga']
         deskripsi = request.form['deskripsi']
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
         gambar = request.files['gambar']
 
         doc = {
@@ -70,11 +78,13 @@ def editfruit(_id):
             'deskripsi':deskripsi
         }
         if gambar:
+
             gambar_asli=gambar.filename
-            file_gambar=gambar_asli.split('/')[-1]
-            file_path=f"static/assets/ImagePath/{file_gambar}"
+            extensi=gambar_asli.split('.')[-1]
+            file_asli=f"img-{mytime}.{extensi}"
+            file_path=f"static/assets/ImagePath/img-{mytime}.{extensi}"
             gambar.save(file_path)
-            doc['gambar']=file_gambar
+            doc['gambar']=file_asli
         db.fruit.update_one({'_id':ObjectId(id)}, {'$set':doc})
         return redirect(url_for('fruit',message="Data Berhasil Diubah"))
 
